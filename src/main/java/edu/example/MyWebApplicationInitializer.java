@@ -1,5 +1,6 @@
 package edu.example;
 
+import edu.example.config.WebConfig;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import org.springframework.web.WebApplicationInitializer;

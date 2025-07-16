@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>WV - Main Page</title>
+    <title>WV - Search Results</title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
 </head>
 <body>
 <nav class="navbar navbar-expand navbar-light bg-light border mb-3">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="icons/logo.png" alt=""
+            <img src="../../img/logo.png" alt=""
                  width="30"
                  height="24"
                  class="d-inline-block align-text-top"
@@ -36,23 +36,29 @@
     </div>
 </form>
 
+<div class="d-flex justify-content-center justify-content-lg-start ms-lg-4 mb-3">
+    <h1 class="fw-normal">Locations: </h1>
+</div>
+
 <div class="container">
     <div class="row justify-content-center justify-content-lg-start gy-3">
-        <div class="col-auto col-lg-3">
-            <div class="card position-relative">
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
-                        aria-label="Close"></button>
-                <img src="icons/sun.png" class="card-img-top p-3" alt="" style="max-width: 225px;">
+        <div class="col-auto">
+            <div class="card" style="width: 18rem;">
                 <div class="card-body">
-                    <h1 class="card-title">21°</h1>
                     <h3 class="card-title">Kazan</h3>
-                    <p class="card-text fs-6">Feels like 22°C Overcast clouds Humidity: 85%</p>
+                    <ul class="card-text list-unstyled lh-lg">
+                        <li><strong>Latitude:</strong> 8.5050281</li>
+                        <li><strong>Longitude:</strong> 125.9771179</li>
+                        <li><strong>Country:</strong> PH</li>
+                        <li><strong>State:</strong> Agusan del Sur</li>
+                    </ul>
+                    <button class="btn btn-primary py-1 px-4">Add</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
