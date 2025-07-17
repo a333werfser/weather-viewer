@@ -1,5 +1,8 @@
 package edu.example.config;
 
+import edu.example.model.People;
+import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernatePersistenceConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +19,14 @@ import org.thymeleaf.templatemode.TemplateMode;
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
+    @Bean
+    public SessionFactory sessionFactory() {
+        return new HibernatePersistenceConfiguration("postgresql-configuration")
+                .managedClass(People.class)
+                .showSql(true, true, true)
+                .createEntityManagerFactory();
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/img/**").addResourceLocations("/img/");
@@ -24,7 +35,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public SpringResourceTemplateResolver templateResolver(){
+    public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
