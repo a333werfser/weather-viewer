@@ -1,37 +1,39 @@
 package edu.example.config;
 
-import edu.example.model.People;
-import org.hibernate.SessionFactory;
-import org.hibernate.jpa.HibernatePersistenceConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernatePersistenceConfiguration;
+
 @Configuration
 @ComponentScan("edu.example")
 @EnableWebMvc
+@PropertySource("classpath:application.properties")
 public class WebConfig implements WebMvcConfigurer {
+
+    @Bean(initMethod = "migrate")
+    public Flyway flyway(
+            @Value("${flyway.url}") String url,
+            @Value("${flyway.username}") String username,
+            @Value("${flyway.password}") String password
+    ) {
+        return Flyway.configure().dataSource(url, username, password).cleanDisabled(false).load();
+    }
 
     @Bean
     public SessionFactory sessionFactory() {
         return new HibernatePersistenceConfiguration("postgresql-configuration")
-                .managedClass(People.class)
                 .showSql(true, true, true)
                 .createEntityManagerFactory();
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/img/**").addResourceLocations("/img/");
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
     }
 
     @Bean
