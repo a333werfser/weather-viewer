@@ -6,13 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
 </head>
 <body>
 <nav class="navbar navbar-expand navbar-light bg-light border mb-3">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="../../img/logo.png" alt=""
+            <img src="../../img/logo.png" alt="" th:src="@{/img/logo.png}"
                  width="30"
                  height="24"
                  class="d-inline-block align-text-top"
@@ -49,7 +49,9 @@
             <div class="card position-relative">
                 <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
                         aria-label="Close"></button>
-                <img src="../../img/sun.png" class="card-img-top p-3" alt="" style="max-width: 225px;">
+                <img src="../../img/sun.png" alt="" th:src="@{/img/sun.png}"
+                     class="card-img-top p-3" style="max-width: 225px;"
+                >
                 <div class="card-body">
                     <h1 class="card-title">21°</h1>
                     <h3 class="card-title">Kazan</h3>

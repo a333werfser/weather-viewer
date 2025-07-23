@@ -1,28 +1,35 @@
 package edu.example.model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 @Setter
+@Entity
+@Table(name = "Sessions")
 public class Session {
 
-    private String sessionId;
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "Id")
+    private UUID id;
 
-    private int userId;
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "UserId", referencedColumnName="Id")
+    private User user;
 
-    private LocalDateTime expireDate;
+    @Column(name = "ExpiresAt", nullable = false)
+    private LocalDateTime expiresAt;
 
-    private int maxAge;
+    public void setExpiresAt(int expirationTime) {
+        this.expiresAt = LocalDateTime.now().plusMinutes(expirationTime);
+    }
 
-    public Session(int userId) {
-        this.sessionId = UUID.randomUUID().toString();
-        this.userId = userId;
-        this.maxAge = 200;
+    public String getId() {
+        return this.id.toString();
     }
 
 }

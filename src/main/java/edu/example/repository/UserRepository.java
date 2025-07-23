@@ -1,38 +1,33 @@
 package edu.example.repository;
 
 import edu.example.model.User;
-import lombok.Getter;
-import lombok.Setter;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Repository
 public class UserRepository {
 
-    private static List<User> users = new ArrayList<>();
+    private final SessionFactory sessionFactory;
 
-    public void addUser(User user) {
-        users.add(user);
+    @Autowired
+    public UserRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    public User findUserById(int id) {
-        for (User user : users) {
-            if (user.getId() == id) {
-                return user;
-            }
-        }
-        return null;
+    public void save(User user) {
+        sessionFactory.inTransaction(session -> {
+            session.persist(user);
+        });
     }
 
-    public User findUserByUsername(String username) {
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return user;
-            }
+    public List<String> getAllLogins() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("select u.login from User u", String.class).getResultList();
         }
-        return null;
     }
 
 }

@@ -1,7 +1,7 @@
 CREATE TABLE Users (
     ID bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     Login varchar(25) UNIQUE NOT NULL,
-    Password varchar(100) NOT NULL
+    Password varchar(255) NOT NULL
 );
 
 CREATE TABLE Locations (
@@ -14,6 +14,6 @@ CREATE TABLE Locations (
 
 CREATE TABLE Sessions (
     ID UUID UNIQUE NOT NULL PRIMARY KEY,
-    UserId bigint NOT NULL REFERENCES Users(ID),
+    UserId bigint UNIQUE NOT NULL REFERENCES Users(ID),
     ExpiresAt timestamp NOT NULL
 );

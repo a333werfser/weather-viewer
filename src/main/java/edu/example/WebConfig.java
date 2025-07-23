@@ -1,9 +1,12 @@
-package edu.example.config;
+package edu.example;
 
+import edu.example.model.Session;
+import edu.example.model.User;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -14,9 +17,9 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.HibernatePersistenceConfiguration;
 
+@EnableWebMvc
 @Configuration
 @ComponentScan("edu.example")
-@EnableWebMvc
 @PropertySource("classpath:application.properties")
 public class WebConfig implements WebMvcConfigurer {
 
@@ -32,8 +35,17 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public SessionFactory sessionFactory() {
         return new HibernatePersistenceConfiguration("postgresql-configuration")
+                .managedClass(User.class)
+                .managedClass(Session.class)
                 .showSql(true, true, true)
                 .createEntityManagerFactory();
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/img/**").addResourceLocations("/img/");
+        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
     }
 
     @Bean
