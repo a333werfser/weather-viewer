@@ -13,23 +13,22 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <img src="../../img/logo.png" alt="" th:src="@{/img/logo.png}"
-                 width="30"
-                 height="24"
-                 class="d-inline-block align-text-top"
-            >
+                 width="30" height="24" class="d-inline-block align-text-top">
             Weather Tracker
         </a>
-        <div class="navbar-nav">
-            <!--/*/
-                <span class="border-bottom border-secondary px-4 me2"
-                      th:if="${username}" th:text="${username}">name</span>
-            /*/-->
-            <a class="btn btn-outline-secondary btn-sm px-4 me-2" href="#"
-               th:href="@{/login}" th:if="${username == null}">Sign-in</a>
+        <div class="d-flex align-items-center ms-auto gap-2">
+            <div th:if="${username}" class="d-flex align-items-center px-3 py-1 me-3 bg-light border rounded-pill">
+                <img src="../../img/user.png" alt="User" th:src="@{/img/user.png}"
+                     width="20" height="20" class="me-2">
+                <span th:text="${username}">User</span>
+            </div>
+            <a class="btn btn-outline-secondary btn-sm px-4" href="#"
+               th:if="${username == null}" th:href="@{/login}">Sign-in</a>
             <a class="btn btn-outline-primary btn-sm px-4" href="#" th:href="@{/register}">Sign-up</a>
         </div>
     </div>
 </nav>
+
 
 <div class="container mb-4" style="max-width: 500px; margin: 0 auto;">
     <form action="" method="get">
@@ -38,7 +37,7 @@
             <input type="text" class="form-control" placeholder="Enter location" id="hidden">
         </div>
         <div class="d-grid">
-            <button class="btn btn-success mx-auto" style="width: 150px;">Search</button>
+            <button class="btn btn-primary mx-auto" style="width: 150px;">Search</button>
         </div>
     </form>
 </div>

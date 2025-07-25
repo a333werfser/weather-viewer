@@ -2,16 +2,18 @@ package edu.example.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "Sessions")
-public class Session {
+public class AuthSession {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "Id")
@@ -23,6 +25,11 @@ public class Session {
 
     @Column(name = "ExpiresAt", nullable = false)
     private LocalDateTime expiresAt;
+
+    public AuthSession(User user, int expirationTime) {
+        this.user = user;
+        setExpiresAt(expirationTime);
+    }
 
     public void setExpiresAt(int expirationTime) {
         this.expiresAt = LocalDateTime.now().plusMinutes(expirationTime);

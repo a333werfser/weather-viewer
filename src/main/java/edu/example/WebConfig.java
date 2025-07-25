@@ -1,6 +1,6 @@
 package edu.example;
 
-import edu.example.model.Session;
+import edu.example.model.AuthSession;
 import edu.example.model.User;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
     public SessionFactory sessionFactory() {
         return new HibernatePersistenceConfiguration("postgresql-configuration")
                 .managedClass(User.class)
-                .managedClass(Session.class)
+                .managedClass(AuthSession.class)
                 .showSql(true, true, true)
                 .createEntityManagerFactory();
     }

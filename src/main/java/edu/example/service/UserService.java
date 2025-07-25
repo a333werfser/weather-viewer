@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -18,8 +19,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean isUsernameAlreadyExist(String username) {
-        List<String> logins = userRepository.getAllLogins();
+    public boolean areValidCredentials(String username, String password) {
+        Optional<User> user = userRepository.findUserByLogin(username);
+        if (user.isPresent()) {
+            User targetUser = user.get();
+            return isPasswordMatchHashed(password, targetUser.getPassword());
+        } else {
+            return false;
+        }
+    }
+
+    public boolean doesUsernameAlreadyExist(String username) {
+        List<String> logins = userRepository.findAllLogins();
         for (String savedLogin : logins) {
             if (savedLogin.equals(username)) {
                 return true;
@@ -36,6 +47,10 @@ public class UserService {
 
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    public boolean isPasswordMatchHashed(String candidate, String hashed) {
+        return BCrypt.checkpw(candidate, hashed);
     }
 
 }
