@@ -33,8 +33,6 @@ public class AuthenticationController {
 
     private static final int MIN_PASSWORD_LENGTH = 8;
 
-    private static final int SESSION_LIFETIME = 1;
-
     private final UserService userService;
     private final AuthSessionService authSessionService;
 

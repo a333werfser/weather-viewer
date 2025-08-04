@@ -12,29 +12,34 @@
 <nav class="navbar navbar-expand navbar-light bg-light border mb-3">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="../../img/logo.png" th:src="@{/img/logo.png}" alt=""
-                 width="30"
-                 height="24"
-                 class="d-inline-block align-text-top"
-            >
+            <img src="../../img/logo.png" alt="" th:src="@{/img/logo.png}"
+                 width="30" height="24" class="d-inline-block align-text-top">
             Weather Tracker
         </a>
-        <div class="navbar-nav">
-            <a class="btn btn-outline-primary btn-sm px-4 me-2" href="#">Sign-in</a>
-            <a class="btn btn-outline-primary btn-sm px-4" href="#">Sign-up</a>
+        <div class="d-flex align-items-center ms-auto gap-2">
+            <div th:if="${username}" class="d-flex align-items-center px-3 py-1 me-3 bg-light border rounded-pill">
+                <img src="../../img/user.png" alt="User" th:src="@{/img/user.png}"
+                     width="20" height="20" class="me-2">
+                <span th:text="${username}">User</span>
+            </div>
+            <a class="btn btn-outline-secondary btn-sm px-4" href="#"
+               th:if="${username == null}" th:href="@{/login}">Sign-in</a>
+            <a class="btn btn-outline-primary btn-sm px-4" href="#" th:href="@{/register}">Sign-up</a>
         </div>
     </div>
 </nav>
 
-<form class="row justify-content-center g-3 mb-4" action="" method="get">
-    <div class="col-8">
-        <label for="hidden" class="visually-hidden">Email</label>
-        <input type="text" class="form-control" placeholder="Enter location" id="hidden">
-    </div>
-    <div class="col-auto">
-        <button class="btn btn-outline-success px-4">Search</button>
-    </div>
-</form>
+<div class="container mb-4" style="max-width: 500px; margin: 0 auto;">
+    <form action="/search" method="get">
+        <div class="mb-3">
+            <label for="hidden" class="visually-hidden">Email</label>
+            <input type="text" class="form-control" name="cityName" placeholder="Enter location" id="hidden">
+        </div>
+        <div class="d-grid">
+            <button class="btn btn-primary mx-auto" style="width: 150px;">Search</button>
+        </div>
+    </form>
+</div>
 
 <div class="d-flex justify-content-center justify-content-lg-start ms-lg-4 mb-3">
     <h1 class="fw-normal">Locations: </h1>
@@ -45,14 +50,15 @@
         <div class="col-auto">
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
-                    <h3 class="card-title">Kazan</h3>
+                    <h3 class="card-title" th:text="${location.getCityName()}">Kazan</h3>
                     <ul class="card-text list-unstyled lh-lg">
-                        <li><strong>Latitude:</strong> 8.5050281</li>
-                        <li><strong>Longitude:</strong> 125.9771179</li>
-                        <li><strong>Country:</strong> PH</li>
-                        <li><strong>State:</strong> Agusan del Sur</li>
+                        <li><strong>Latitude:</strong> <span th:text="${location.getCoordinates().getLat()}">8.5050281</span></li>
+                        <li><strong>Longitude:</strong> <span th:text="${location.getCoordinates().getLon()}">125.9771179</span></li>
+                        <li><strong>Country:</strong> <span th:text="${location.getSystemInformation().getCountry()}">PH</span></li>
                     </ul>
-                    <button class="btn btn-primary py-1 px-4">Add</button>
+                    <form action="/add" th:action="@{/addLocation(cityName=${location.getCityName()})}" method="post">
+                        <button class="btn btn-primary py-1 px-4">Add</button>
+                    </form>
                 </div>
             </div>
         </div>
