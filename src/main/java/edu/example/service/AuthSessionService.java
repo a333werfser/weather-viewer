@@ -9,12 +9,10 @@ import jakarta.persistence.RollbackException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class AuthSessionService {
 
-    private static final int SESSION_LIFETIME_MINUTES = 1;
+    private static final int SESSION_LIFETIME_MINUTES = 30;
 
     private final AuthSessionRepository authSessionRepository;
 

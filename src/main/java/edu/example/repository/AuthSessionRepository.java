@@ -45,6 +45,15 @@ public class AuthSessionRepository {
         }
     }
 
+    public void deleteAuthSessionById(UUID id) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.createMutationQuery("delete from AuthSession a where a.id = :id")
+                    .setParameter("id", id).executeUpdate();
+            tx.commit();
+        }
+    }
+
     public void save(AuthSession authSession) {
         sessionFactory.inTransaction(session -> {
             session.persist(authSession);

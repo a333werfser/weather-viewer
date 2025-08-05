@@ -1,8 +1,10 @@
 package edu.example.controller;
 
 import edu.example.model.AuthSession;
+import edu.example.repository.AuthSessionRepository;
 import edu.example.repository.UserRepository;
 import edu.example.service.AuthSessionService;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +21,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+import java.util.UUID;
 
 @Controller
 public class AuthenticationController {
@@ -34,12 +35,17 @@ public class AuthenticationController {
     private static final int MIN_PASSWORD_LENGTH = 8;
 
     private final UserService userService;
+
     private final AuthSessionService authSessionService;
 
+    private final AuthSessionRepository authSessionRepository;
+
     @Autowired
-    public AuthenticationController(UserService userService, AuthSessionService authSessionService) {
+    public AuthenticationController(UserService userService, AuthSessionService authSessionService,
+                                    AuthSessionRepository authSessionRepository) {
         this.userService = userService;
         this.authSessionService = authSessionService;
+        this.authSessionRepository = authSessionRepository;
     }
 
     @PostMapping("/register")
@@ -97,6 +103,15 @@ public class AuthenticationController {
         }
 
         return "login-with-exception";
+    }
+
+    @PostMapping("/logout")
+    public String processLogout(@CookieValue("id") String authSessionId, HttpServletResponse httpServletResponse) {
+        if (authSessionId != null) {
+            authSessionRepository.deleteAuthSessionById(UUID.fromString(authSessionId));
+            httpServletResponse.setHeader("Set-Cookie", String.format("id=%s; Max-Age=0", authSessionId));
+        }
+        return "redirect:/";
     }
 
     @GetMapping("/register")

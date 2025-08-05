@@ -58,7 +58,21 @@ public class WeatherController {
             return "redirect:/";
         }
         else {
-            return "redirect:/register";
+            return "redirect:/login";
+        }
+    }
+
+    @PostMapping("/deleteLocation")
+    public String deleteLocation(@CookieValue(value = "id", required = false) String authSessionId,
+                                 @RequestParam("locationId") String locationId
+    ) {
+        if (authSessionId != null) {
+            AuthSession authSession = authSessionRepository.findAuthSessionById(UUID.fromString(authSessionId));
+            locationRepository.deleteLocation(locationId);
+            return "redirect:/";
+        }
+        else {
+            return "redirect:/login";
         }
     }
 

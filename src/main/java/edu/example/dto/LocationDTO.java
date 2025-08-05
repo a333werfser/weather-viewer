@@ -25,4 +25,10 @@ public class LocationDTO {
     @JsonProperty("sys")
     private SystemInformation systemInformation;
 
+    @JsonIgnore
+    private String imgPath;
+
+    @JsonIgnore
+    private String id;
+
 }

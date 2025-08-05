@@ -19,12 +19,15 @@
         <div class="d-flex align-items-center ms-auto gap-2">
             <div th:if="${username}" class="d-flex align-items-center px-3 py-1 me-3 bg-light border rounded-pill">
                 <img src="../../img/user.png" alt="User" th:src="@{/img/user.png}"
-                     width="20" height="20" class="me-2">
+                     width="20" height="20">
                 <span th:text="${username}">User</span>
             </div>
             <a class="btn btn-outline-secondary btn-sm px-4" href="#"
                th:if="${username == null}" th:href="@{/login}">Sign-in</a>
-            <a class="btn btn-outline-primary btn-sm px-4" href="#" th:href="@{/register}">Sign-up</a>
+            <a class="btn btn-outline-primary btn-sm px-4" href="#" th:if="${username == null}" th:href="@{/register}">Sign-up</a>
+            <form th:action="@{/logout}" th:method="post">
+                <button class="btn btn-outline-danger btn-sm px-4" th:if="${username}">Log-out</button>
+            </form>
         </div>
     </div>
 </nav>
@@ -46,9 +49,12 @@
     <div class="row justify-content-center justify-content-lg-start gy-3">
         <div class="col-auto col-lg-3" th:if="${not #lists.isEmpty(locations)}" th:each="loc : ${locations}">
             <div class="card position-relative">
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
-                        aria-label="Close"></button>
-                <img src="../../img/sun.png" alt="" th:src="@{/img/sun.png}"
+                <form th:action="@{/deleteLocation}" th:method="post">
+                    <input type="hidden" name="locationId" th:value="${loc.getId()}">
+                    <button type="submit" class="btn-close position-absolute top-0 end-0 m-2"
+                            aria-label="Close"></button>
+                </form>
+                <img src="../../img/thunderstorm.png" alt="" th:src="@{${loc.getImgPath()}}"
                      class="card-img-top p-3" style="max-width: 225px;"
                 >
                 <div class="card-body">
