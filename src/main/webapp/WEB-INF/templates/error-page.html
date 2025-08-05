@@ -45,8 +45,8 @@
         <div class="col-8">
             <div class="card-body">
                 <h5 class="card-title fs-4">404 Not Found</h5>
-                <p class="card-text">Oops! Seems like something went wrong . . .</p>
-                <a href="#" th:href="@{/login}" class="card-link">Go home</a>
+                <p class="card-text" th:text="${message}">Oops! Seems like something went wrong . . .</p>
+                <a href="#" th:href="@{/}" class="card-link">Go home</a>
             </div>
         </div>
     </div>

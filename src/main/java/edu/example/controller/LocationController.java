@@ -6,17 +6,17 @@ import edu.example.model.User;
 import edu.example.repository.AuthSessionRepository;
 import edu.example.repository.LocationRepository;
 import edu.example.service.LocationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.UUID;
 
 @Controller
-public class WeatherController {
+@RequestMapping("/location")
+public class LocationController {
 
     private final AuthSessionRepository authSessionRepository;
 
@@ -24,7 +24,7 @@ public class WeatherController {
 
     private final LocationService locationService;
 
-    public WeatherController(
+    public LocationController(
             AuthSessionRepository authSessionRepository,
             LocationRepository locationRepository,
             LocationService locationService
@@ -47,7 +47,7 @@ public class WeatherController {
         return "search-results";
     }
 
-    @PostMapping("/addLocation")
+    @PostMapping
     public String addLocation(@CookieValue(value = "id", required = false) String authSessionId,
                               @RequestParam("cityName") String cityName
     ) {
@@ -62,7 +62,7 @@ public class WeatherController {
         }
     }
 
-    @PostMapping("/deleteLocation")
+    @PostMapping("/delete")
     public String deleteLocation(@CookieValue(value = "id", required = false) String authSessionId,
                                  @RequestParam("locationId") String locationId
     ) {
@@ -74,6 +74,13 @@ public class WeatherController {
         else {
             return "redirect:/login";
         }
+    }
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleException(HttpClientErrorException e, Model model) {
+        model.addAttribute("message", "Oops! Location not found...");
+        return "error-page";
     }
 
 }

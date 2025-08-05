@@ -2,12 +2,8 @@ package edu.example.controller;
 
 import edu.example.model.AuthSession;
 import edu.example.repository.AuthSessionRepository;
-import edu.example.repository.UserRepository;
 import edu.example.service.AuthSessionService;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Controller
+@RequestMapping("/auth")
 public class AuthenticationController {
 
     private static final int MAX_LOGIN_LENGTH = 25;
@@ -109,7 +106,7 @@ public class AuthenticationController {
     public String processLogout(@CookieValue("id") String authSessionId, HttpServletResponse httpServletResponse) {
         if (authSessionId != null) {
             authSessionRepository.deleteAuthSessionById(UUID.fromString(authSessionId));
-            httpServletResponse.setHeader("Set-Cookie", String.format("id=%s; Max-Age=0", authSessionId));
+            httpServletResponse.setHeader("Set-Cookie", String.format("id=%s; Max-Age=0; path=/", authSessionId));
         }
         return "redirect:/";
     }
