@@ -99,6 +99,7 @@ public class AuthenticationController {
             model.addAttribute("errorMessage", "Invalid username or password");
         }
 
+        httpServletResponse.setStatus(400);
         return "login-with-exception";
     }
 
@@ -121,32 +122,32 @@ public class AuthenticationController {
         return "login";
     }
 
-    public String format(LocalDateTime localDateTime) {
+    private String format(LocalDateTime localDateTime) {
         ZonedDateTime moscowDateTime = localDateTime.atZone(ZoneId.of("Europe/Moscow"));
         ZonedDateTime gmtDateTime = moscowDateTime.withZoneSameInstant(ZoneId.of("GMT"));
         return gmtDateTime.format(DateTimeFormatter.RFC_1123_DATE_TIME);
     }
 
-    public boolean isValidUserData(String username, String password, String repeatedPassword) {
+    private boolean isValidUserData(String username, String password, String repeatedPassword) {
         return doPasswordsMatch(password, repeatedPassword) &&
                 isUsernameUnique(username) &&
                 isValidUsernameLength(username) &&
                 isValidPasswordLength(password);
     }
 
-    public boolean isValidUsernameLength(String username) {
+    private boolean isValidUsernameLength(String username) {
         return username.length() >= MIN_LOGIN_LENGTH && username.length() <= MAX_LOGIN_LENGTH;
     }
 
-    public boolean isValidPasswordLength(String password) {
+    private boolean isValidPasswordLength(String password) {
         return password.length() >= MIN_PASSWORD_LENGTH && password.length() <= MAX_PASSWORD_LENGTH;
     }
 
-    public boolean isUsernameUnique(String username) {
+    private boolean isUsernameUnique(String username) {
         return !userService.doesUsernameAlreadyExist(username);
     }
 
-    public boolean doPasswordsMatch(String password, String repeatedPassword) {
+    private boolean doPasswordsMatch(String password, String repeatedPassword) {
         return password.equals(repeatedPassword);
     }
 }

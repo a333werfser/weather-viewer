@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public class LocationRepository {
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     @Autowired
     public LocationRepository(SessionFactory sessionFactory) {

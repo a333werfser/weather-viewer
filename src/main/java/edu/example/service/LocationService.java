@@ -7,7 +7,6 @@ import edu.example.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -18,11 +17,14 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
 
+    private final RestTemplate restTemplate;
+
     @Value("${w.api.key}")
     private String apikey;
 
-    public LocationService(LocationRepository locationRepository) {
+    public LocationService(LocationRepository locationRepository, RestTemplate restTemplate) {
         this.locationRepository = locationRepository;
+        this.restTemplate = restTemplate;
     }
 
     public List<LocationDTO> getAllUserLocations(User user) {
@@ -38,7 +40,6 @@ public class LocationService {
         String url = String.format(
                 "https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric",
                 cityName, apikey);
-        RestTemplate restTemplate = new RestTemplate();
         LocationDTO locationDTO = null;
         locationDTO = restTemplate.getForObject(url, LocationDTO.class);
 

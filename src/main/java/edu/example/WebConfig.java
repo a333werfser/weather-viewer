@@ -6,6 +6,7 @@ import edu.example.model.User;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,6 +21,7 @@ import org.hibernate.jpa.HibernatePersistenceConfiguration;
 
 @EnableWebMvc
 @Configuration
+@Profile("default")
 @ComponentScan("edu.example")
 @PropertySource("classpath:application.properties")
 public class WebConfig implements WebMvcConfigurer {
@@ -34,11 +36,20 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    @Scope("prototype")
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
     public SessionFactory sessionFactory() {
-        return new HibernatePersistenceConfiguration("postgresql-configuration")
+        return new HibernatePersistenceConfiguration("postgresql")
                 .managedClass(User.class)
                 .managedClass(AuthSession.class)
                 .managedClass(Location.class)
+                .jdbcDriver("org.postgresql.Driver")
+                .jdbcUrl("jdbc:postgresql://localhost:5432/weather-viewer-db")
+                .jdbcCredentials("postgres", "1234")
                 .showSql(true, true, true)
                 .createEntityManagerFactory();
     }
