@@ -21,11 +21,12 @@ public class LocationRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public void deleteLocation(String id) {
+    public void deleteLocation(Long id, User user) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
-            session.createMutationQuery("delete from Location l where l.id = :id")
-                    .setParameter("id", id).executeUpdate();
+            session.createMutationQuery("delete from Location l where l.id = :id and l.user = :user")
+                    .setParameter("id", id)
+                    .setParameter("user", user).executeUpdate();
             tx.commit();
         }
     }

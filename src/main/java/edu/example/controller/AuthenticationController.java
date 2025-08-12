@@ -3,7 +3,6 @@ package edu.example.controller;
 import edu.example.model.AuthSession;
 import edu.example.repository.AuthSessionRepository;
 import edu.example.service.AuthSessionService;
-import jakarta.persistence.EntityExistsException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

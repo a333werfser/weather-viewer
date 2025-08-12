@@ -1,13 +1,16 @@
 package edu.example;
 
+import edu.example.interceptor.AuthSessionInterceptor;
 import edu.example.model.AuthSession;
 import edu.example.model.Location;
 import edu.example.model.User;
 import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -25,6 +28,13 @@ import org.hibernate.jpa.HibernatePersistenceConfiguration;
 @ComponentScan("edu.example")
 @PropertySource("classpath:application.properties")
 public class WebConfig implements WebMvcConfigurer {
+
+    private AuthSessionInterceptor authSessionInterceptor;
+
+    @Autowired
+    public void setAuthSessionInterceptor(AuthSessionInterceptor authSessionInterceptor) {
+        this.authSessionInterceptor = authSessionInterceptor;
+    }
 
     @Bean(initMethod = "migrate")
     public Flyway flyway(
@@ -59,6 +69,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/img/**").addResourceLocations("/img/");
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authSessionInterceptor).addPathPatterns("/location", "/location/delete");
     }
 
     @Bean
