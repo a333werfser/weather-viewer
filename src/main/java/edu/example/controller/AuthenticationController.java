@@ -3,6 +3,9 @@ package edu.example.controller;
 import edu.example.model.AuthSession;
 import edu.example.repository.AuthSessionRepository;
 import edu.example.service.AuthSessionService;
+import jakarta.persistence.EntityExistsException;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -66,10 +69,6 @@ public class AuthenticationController {
             model.addAttribute("errorMessage", "Passwords don't match");
         }
 
-        else if (!isUsernameUnique(username)) {
-            model.addAttribute("errorMessage", "Login already exists");
-        }
-
         httpServletResponse.setStatus(400);
         return "register-with-exception";
     }
@@ -122,6 +121,13 @@ public class AuthenticationController {
         return "login";
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleException(Model model) {
+        model.addAttribute("errorMessage", "Username already taken");
+        return "register-with-exception";
+    }
+
     private String format(LocalDateTime localDateTime) {
         ZonedDateTime moscowDateTime = localDateTime.atZone(ZoneId.of("Europe/Moscow"));
         ZonedDateTime gmtDateTime = moscowDateTime.withZoneSameInstant(ZoneId.of("GMT"));
@@ -130,7 +136,6 @@ public class AuthenticationController {
 
     private boolean isValidUserData(String username, String password, String repeatedPassword) {
         return doPasswordsMatch(password, repeatedPassword) &&
-                isUsernameUnique(username) &&
                 isValidUsernameLength(username) &&
                 isValidPasswordLength(password);
     }
@@ -141,10 +146,6 @@ public class AuthenticationController {
 
     private boolean isValidPasswordLength(String password) {
         return password.length() >= MIN_PASSWORD_LENGTH && password.length() <= MAX_PASSWORD_LENGTH;
-    }
-
-    private boolean isUsernameUnique(String username) {
-        return !userService.doesUsernameAlreadyExist(username);
     }
 
     private boolean doPasswordsMatch(String password, String repeatedPassword) {

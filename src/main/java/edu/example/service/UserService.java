@@ -29,16 +29,6 @@ public class UserService {
         }
     }
 
-    public boolean doesUsernameAlreadyExist(String username) {
-        List<String> logins = userRepository.findAllLogins();
-        for (String savedLogin : logins) {
-            if (savedLogin.equals(username)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void register(User user) {
         String hashedPassword = hashPassword(user.getPassword());
         user.setPassword(hashedPassword);
