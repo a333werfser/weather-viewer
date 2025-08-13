@@ -1,9 +1,7 @@
 package edu.example.controller;
 
-import edu.example.model.AuthSession;
 import edu.example.model.Location;
 import edu.example.model.User;
-import edu.example.repository.AuthSessionRepository;
 import edu.example.repository.LocationRepository;
 import edu.example.service.LocationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,37 +11,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.UUID;
-
 @Controller
 @RequestMapping("/location")
 public class LocationController {
-
-    private final AuthSessionRepository authSessionRepository;
 
     private final LocationRepository locationRepository;
 
     private final LocationService locationService;
 
-    public LocationController(
-            AuthSessionRepository authSessionRepository,
-            LocationRepository locationRepository,
-            LocationService locationService
-    ) {
-        this.authSessionRepository = authSessionRepository;
+    public LocationController(LocationRepository locationRepository, LocationService locationService) {
         this.locationRepository = locationRepository;
         this.locationService = locationService;
     }
 
     @GetMapping("/search")
-    public String search(@CookieValue(value = "id", required = false) String authSessionId,
-                         @RequestParam("cityName") String cityName,
-                         Model model
-    ) {
-        if (authSessionId != null) {
-            AuthSession authSession = authSessionRepository.findAuthSessionById(UUID.fromString(authSessionId));
-            model.addAttribute("username", authSession.getUser().getLogin());
-        }
+    public String search(@RequestParam("cityName") String cityName, HttpServletRequest request, Model model) {
+        User user = (User) request.getAttribute("user");
+        model.addAttribute("username", user.getLogin());
         model.addAttribute("location", locationService.fetchLocationWeather(cityName));
         return "search-results";
     }

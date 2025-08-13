@@ -74,7 +74,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authSessionInterceptor).addPathPatterns("/location", "/location/delete");
+        registry.addInterceptor(authSessionInterceptor).addPathPatterns("/location", "/location/delete", "/location/search");
     }
 
     @Bean

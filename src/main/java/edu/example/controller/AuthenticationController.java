@@ -69,7 +69,7 @@ public class AuthenticationController {
         }
 
         httpServletResponse.setStatus(400);
-        return "register-with-exception";
+        return "register-error";
     }
 
     @PostMapping("/login")
@@ -83,7 +83,7 @@ public class AuthenticationController {
             httpServletResponse.setHeader("Set-Cookie", String.format(
                     "id=%s; Expires=%s; path=/; HttpOnly",
                     authSession.getId(),
-                    format(authSession.getExpiresAt())
+                    formatExpiresAt(authSession.getExpiresAt())
             ));
             return "redirect:/";
         }
@@ -98,7 +98,7 @@ public class AuthenticationController {
         }
 
         httpServletResponse.setStatus(400);
-        return "login-with-exception";
+        return "login-error";
     }
 
     @PostMapping("/logout")
@@ -124,10 +124,10 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleException(Model model) {
         model.addAttribute("errorMessage", "Username already taken");
-        return "register-with-exception";
+        return "register-error";
     }
 
-    private String format(LocalDateTime localDateTime) {
+    private String formatExpiresAt(LocalDateTime localDateTime) {
         ZonedDateTime moscowDateTime = localDateTime.atZone(ZoneId.of("Europe/Moscow"));
         ZonedDateTime gmtDateTime = moscowDateTime.withZoneSameInstant(ZoneId.of("GMT"));
         return gmtDateTime.format(DateTimeFormatter.RFC_1123_DATE_TIME);
