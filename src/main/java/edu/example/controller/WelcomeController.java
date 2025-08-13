@@ -36,7 +36,7 @@ public class WelcomeController {
     ) {
         if (authSessionId != null) {
             AuthSession authSession = authSessionRepository.findAuthSessionById(UUID.fromString(authSessionId));
-            List<LocationDTO> locations = locationService.getAllUserLocations(authSession.getUser());
+            List<LocationDTO> locations = locationService.fetchAllUserLocations(authSession.getUser());
 
             model.addAttribute("username", authSession.getUser().getLogin());
             model.addAttribute("locations", locations);

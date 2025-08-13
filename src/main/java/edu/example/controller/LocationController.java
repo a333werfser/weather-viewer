@@ -44,14 +44,14 @@ public class LocationController {
             AuthSession authSession = authSessionRepository.findAuthSessionById(UUID.fromString(authSessionId));
             model.addAttribute("username", authSession.getUser().getLogin());
         }
-        model.addAttribute("location", locationService.createLocationDTO(cityName));
+        model.addAttribute("location", locationService.fetchLocationWeather(cityName));
         return "search-results";
     }
 
     @PostMapping
     public String addLocation(@RequestParam("cityName") String cityName, HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
-        locationRepository.save(new Location(locationService.createLocationDTO(cityName), user));
+        locationRepository.save(new Location(locationService.fetchLocationWeather(cityName), user));
         return "redirect:/";
     }
 

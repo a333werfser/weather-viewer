@@ -31,7 +31,7 @@ public class LocationServiceTests {
                 cityName);
 
         when(restTemplate.getForObject(anyString(), eq(LocationDTO.class))).thenReturn(testData);
-        LocationDTO location = locationService.createLocationDTO(cityName);
+        LocationDTO location = locationService.fetchLocationWeather(cityName);
 
         assertEquals(cityName, location.getCityName());
         assertEquals("22", location.getWeatherConditions().getTemperature());

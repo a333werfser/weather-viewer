@@ -27,16 +27,16 @@ public class LocationService {
         this.restTemplate = restTemplate;
     }
 
-    public List<LocationDTO> getAllUserLocations(User user) {
+    public List<LocationDTO> fetchAllUserLocations(User user) {
         List<Location> locations = locationRepository.findAllUserLocations(user);
         List<LocationDTO> locationDTOs = new ArrayList<>();
         for (Location loc : locations) {
-            locationDTOs.add(createLocationDTOWithId(loc));
+            locationDTOs.add(fetchLocationWeatherWithId(loc));
         }
         return locationDTOs;
     }
 
-    public LocationDTO createLocationDTO(String cityName) throws HttpClientErrorException {
+    public LocationDTO fetchLocationWeather(String cityName) throws HttpClientErrorException {
         String url = String.format(
                 "https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric",
                 cityName, apikey);
@@ -44,19 +44,23 @@ public class LocationService {
         locationDTO = restTemplate.getForObject(url, LocationDTO.class);
 
         String weather = locationDTO.getWeather().get(0).getMain();
-        String imgPath = composeImgPath(weather);
+        String imgPath = composeWeatherImagePath(weather);
         locationDTO.setImgPath(imgPath);
 
-        return formatStrings(locationDTO);
+        return formatWeatherData(locationDTO);
     }
 
-    public LocationDTO createLocationDTOWithId(Location location) {
-        LocationDTO locationDTO = createLocationDTO(location.getName());
+    /**
+     * это костыль чтобы реализовать фичу удаления локации по ID
+     * @return Location DTO с айди из базы
+     */
+    public LocationDTO fetchLocationWeatherWithId(Location location) {
+        LocationDTO locationDTO = fetchLocationWeather(location.getName());
         locationDTO.setId(location.getId().toString());
         return locationDTO;
     }
 
-    public LocationDTO formatStrings(LocationDTO locationDTO) {
+    public LocationDTO formatWeatherData(LocationDTO locationDTO) {
         String temperatureString = locationDTO.getWeatherConditions().getTemperature();
         String feelsLikeString = locationDTO.getWeatherConditions().getFeelsLike();
 
@@ -74,34 +78,17 @@ public class LocationService {
         return locationDTO;
     }
 
-    private String composeImgPath(String weather) {
-        String filename;
-        switch (weather.toLowerCase()) {
-            case "thunderstorm":
-                filename = "thunderstorm.png";
-                break;
-            case "drizzle":
-                filename = "drizzle.png";
-                break;
-            case "rain":
-                filename = "rain.png";
-                break;
-            case "snow":
-                filename = "snow.png";
-                break;
-            case "atmosphere":
-                filename = "atmosphere.png";
-                break;
-            case "clear":
-                filename = "clear.png";
-                break;
-            case "clouds":
-                filename = "clouds.png";
-                break;
-            default:
-                filename = "default.png";
-                break;
-        }
+    private String composeWeatherImagePath(String weather) {
+        String filename = switch (weather.toLowerCase()) {
+            case "thunderstorm" -> "thunderstorm.png";
+            case "drizzle" -> "drizzle.png";
+            case "rain" -> "rain.png";
+            case "snow" -> "snow.png";
+            case "atmosphere" -> "atmosphere.png";
+            case "clear" -> "clear.png";
+            case "clouds" -> "clouds.png";
+            default -> "default.png";
+        };
         return "/img/" + filename;
     }
 
