@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Weather Viewer - Login</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body style="height: 95vh;">
+<div class="d-flex m-auto h-100 align-items-center" style="max-width: 400px;">
+    <form class="w-100 border p-5 rounded-3 shadow-lg" action="/login" method="post" th:action="@{/auth/login}" th:method="post"
+          th:accept-charset="UTF-8"
+    >
+        <img class="img-fluid" src="../../img/logo.png" th:src="@{/img/logo.png}" alt="">
+        <h1 class="text-center mb-3">Log-in</h1>
+
+        <input type="text" class="form-control mb-3" name="username" placeholder="Username">
+        <input type="password" class="form-control mb-3" name="password" placeholder="Password">
+
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary px-5">Sign-in</button>
+        </div>
+    </form>
+</div>
+<script src="../../js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

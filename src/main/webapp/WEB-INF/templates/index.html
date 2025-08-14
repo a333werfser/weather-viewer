@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Weather Viewer - Home</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-light bg-light border mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="../../img/logo.png" alt="" th:src="@{/img/logo.png}"
+                 width="30" height="24" class="d-inline-block align-text-top">
+            Weather Tracker
+        </a>
+        <div class="d-flex align-items-center ms-auto gap-2">
+            <div th:if="${username}" class="d-flex align-items-center px-3 py-1 me-3 bg-light border rounded-pill">
+                <img src="../../img/user.png" alt="User" th:src="@{/img/user.png}"
+                     width="20" height="20">
+                <span th:text="${username}">User</span>
+            </div>
+            <a class="btn btn-outline-secondary btn-sm px-4" href="#"
+               th:if="${username == null}" th:href="@{/auth/login}">Sign-in</a>
+            <a class="btn btn-outline-primary btn-sm px-4" href="#" th:if="${username == null}" th:href="@{/auth/register}">Sign-up</a>
+            <form th:action="@{/auth/logout}" th:method="post">
+                <button class="btn btn-outline-danger btn-sm px-4" th:if="${username}">Log-out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container mb-4" style="max-width: 500px; margin: 0 auto;">
+    <form action="/search" method="get" th:action="@{/location/search}" th:method="get" th:accept-charset="UTF-8">
+        <div class="mb-3">
+            <input type="text" class="form-control" name="cityName" placeholder="Enter location" id="hidden">
+        </div>
+        <div class="d-grid">
+            <button class="btn btn-primary mx-auto" style="width: 150px;">Search</button>
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center justify-content-lg-start gy-3">
+        <div class="col-auto col-lg-3" th:if="${not #lists.isEmpty(locations)}" th:each="loc : ${locations}">
+            <div class="card position-relative">
+                <form th:action="@{/location/delete}" th:method="post">
+                    <input type="hidden" name="locationId" th:value="${loc.getId()}">
+                    <button type="submit" class="btn-close position-absolute top-0 end-0 m-2"
+                            aria-label="Close"></button>
+                </form>
+                <img src="../../img/thunderstorm.png" alt="" th:src="@{${loc.getImgPath()}}"
+                     class="card-img-top p-3" style="max-width: 225px;"
+                >
+                <div class="card-body">
+                    <h1 class="card-title"><span th:text="${loc.getWeatherConditions().getTemperature()}">21</span>°</h1>
+                    <h3 class="card-title" th:text="${loc.getCityName()}">Kazan</h3>
+                    <p class="card-text fs-6">
+                        Feels like: <span th:text="${loc.getWeatherConditions().getFeelsLike()}">22</span>°C
+                        <span th:text="${loc.getWeather().get(0).getDescription()}">Overcast clouds</span>
+                        Humidity: <span th:text="${loc.getWeatherConditions().getHumidity()}">85</span>%
+                        Pressure: <span th:text="${loc.getWeatherConditions().getPressure()}">123</span>hPa
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

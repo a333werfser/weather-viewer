@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Weather Viewer - Search results</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-light bg-light border mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="../../img/logo.png" alt="" th:src="@{/img/logo.png}"
+                 width="30" height="24" class="d-inline-block align-text-top">
+            Weather Tracker
+        </a>
+        <div class="d-flex align-items-center ms-auto gap-2">
+            <div th:if="${username}" class="d-flex align-items-center px-3 py-1 me-3 bg-light border rounded-pill">
+                <img src="../../img/user.png" alt="User" th:src="@{/img/user.png}"
+                     width="20" height="20">
+                <span th:text="${username}">User</span>
+            </div>
+            <a class="btn btn-outline-secondary btn-sm px-4" href="#"
+               th:if="${username == null}" th:href="@{/auth/login}">Sign-in</a>
+            <a class="btn btn-outline-primary btn-sm px-4" href="#" th:if="${username == null}" th:href="@{/auth/register}">Sign-up</a>
+            <form th:action="@{/auth/logout}" th:method="post">
+                <button class="btn btn-outline-danger btn-sm px-4" th:if="${username}">Log-out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container mb-4" style="max-width: 500px; margin: 0 auto;">
+    <form action="/search" method="get" th:action="@{/location/search}" th:method="get" th:accept-charset="UTF-8">
+        <div class="mb-3">
+            <input type="text" class="form-control" name="cityName" placeholder="Enter location" id="hidden">
+        </div>
+        <div class="d-grid">
+            <button class="btn btn-primary mx-auto" style="width: 150px;">Search</button>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex justify-content-center justify-content-lg-start ms-lg-4 mb-3">
+    <h1 class="fw-normal">Locations: </h1>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center justify-content-lg-start gy-3">
+        <div class="col-auto">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h3 class="card-title" th:text="${location.getCityName()}">Kazan</h3>
+                    <ul class="card-text list-unstyled lh-lg">
+                        <li><strong>Latitude:</strong> <span th:text="${location.getCoordinates().getLat()}">8.5050281</span></li>
+                        <li><strong>Longitude:</strong> <span th:text="${location.getCoordinates().getLon()}">125.9771179</span></li>
+                        <li><strong>Country:</strong> <span th:text="${location.getSystemInformation().getCountry()}">PH</span></li>
+                    </ul>
+                    <form action="/add" th:action="@{/location(cityName=${location.getCityName()})}" method="post">
+                        <button class="btn btn-primary py-1 px-4">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
