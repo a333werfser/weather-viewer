@@ -27,10 +27,12 @@ public class AuthSessionInterceptor implements HandlerInterceptor {
         String authSessionId = null;
         Cookie[] cookies = request.getCookies();
 
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("id")) {
-                authSessionId = cookie.getValue();
-                break;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("id")) {
+                    authSessionId = cookie.getValue();
+                    break;
+                }
             }
         }
 
