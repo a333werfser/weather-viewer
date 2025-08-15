@@ -9,17 +9,16 @@
 - Просмотр списка локаций, для каждой локации отображается название и температура
 ## Интерфейс (демо)
 ![Главная страница](https://github.com/a333werfser/weather-viewer/blob/main/img/index.png)
-## Запуск:
-1. Создайть базу **`weather-viewer-db`** (PostgreSQL)
-2. Класс `WebConfig` -> `@Bean sessionFactory()` поменяйте реквизиты: `.jdbcCredentials("dbUser", "password")`
-3. Зарегистрироваться и получить бесплатный API ключ: https://openweathermap.org/
-4. Создать переменную окружения `W_API_KEY` с вашим ключом
-5. Собрать war-артефакт
-6. Деплой в Tomcat
 ## Технологии
 Бэкенд: Spring MVC, Thymeleaf \
 Сервер: Apache Tomcat \
 Базы Данных: Hibernate, HikariCP, PostgreSQL, H2, Flyway \
 Тесты: JUnit 5, Mockito, Spring TestContext \
 UI: HTML, CSS, Bootstrap
-
+## Запуск:
+1. Создать базу **`weather-viewer-db`** (PostgreSQL)
+2. Класс `WebConfig` -> `@Bean sessionFactory()` поменяйте реквизиты: `.jdbcCredentials("dbUser", "password")`
+3. Зарегистрироваться и получить бесплатный API ключ: https://openweathermap.org/
+4. Создать переменную окружения `W_API_KEY` с вашим ключом
+5. Собрать war-артефакт
+6. Деплой в Tomcat
